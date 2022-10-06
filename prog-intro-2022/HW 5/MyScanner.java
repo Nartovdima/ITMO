@@ -181,10 +181,11 @@ public class MyScanner {
 
 		String tmp = currToken;
 		currToken = null;
-		if (tmp.charAt(tmp.length() - 1) == 'o')
+		if (tmp.charAt(tmp.length() - 1) == 'o') {
 			return (Integer.parseInt(tmp.substring(0, tmp.length() - 1), 8));
-		else
-			return (Integer.parseInt(tmp, 10));
+		} else {
+			return (Integer.parseInt(tmp));
+		}
 	}
 
 	public boolean hasNextLine() {
@@ -203,26 +204,21 @@ public class MyScanner {
 	}
 
 	private boolean isInt(String s) {
-
 		int radix = 10, n = s.length();
 		if (s.charAt(n - 1) == 'o') {
 			radix = 8;
 			n--;
 		}
-		
+
 		for (int i = 0; i < n; i++) {
-			System.err.println(i + " " + s.charAt(i) + " " + (isDigit(s.charAt(i), radix)));
-			if (!(i == 0 && s.charAt(i) == '-') && (Character.forDigit(s.charAt(i), radix) == '\u0000'))
+			if (!(i == 0 && (s.charAt(i) == '-' || s.charAt(i) == '+')) && !isDigit(s.charAt(i), radix))
 				return false;
 		}
 		return true;
 	}
 
 	private boolean isDigit(char d, int radix) {
-		System.err.println(d + " " + radix);
-		System.err.println((Character.forDigit(d, radix) == '\u0000'));
-
-		return (Character.forDigit(d, radix) != '\u0000');
+		return (Character.isDigit(d) && (Character.forDigit(Integer.parseInt(String.valueOf(d)), radix) != '\u0000'));
 	}
 
 	private boolean isLineSeparator(char ch) {
@@ -240,15 +236,6 @@ public class MyScanner {
 		} catch (IOException e) {
 			close = true;
 			return -1;
-		}
-	}
-
-	public static void main(String[] args) {
-		String s = "123 456o";
-		MyScanner a = new MyScanner(s);
-		System.out.println("1121" + (Character.forDigit(1, 10) != '\u0000'));
-		while (a.hasNextInt()) {
-			System.out.println(a.nextInt());
 		}
 	}
 }
