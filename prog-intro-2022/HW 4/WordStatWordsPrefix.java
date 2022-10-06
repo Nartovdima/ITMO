@@ -6,20 +6,16 @@ public class WordStatWordsPrefix {
 	public static String[] words;
 
 	public static void main(String[] args) {
-		String InpFileName = args[0], OutFileName = args[1];
+		String inpFileName = args[0], outFileName = args[1];
 		words = new String[1];
 		insertPos = 0;
 		
-		inpRead(InpFileName);
-		/*for (int i = 0; i < insertPos; i++) {
-			System.out.println(words[i]);
-		}*/
+		inpRead(inpFileName);
 		int[] cnt = new int[insertPos];
-		int[] finalId = new int[insertPos];
 
-		preCalc(cnt, finalId);
+		preCalc(cnt);
 
-		outWrite(OutFileName, finalId, cnt);
+		outWrite(outFileName, cnt);
 	}
 
 	public static BufferedReader openInpFile(String name) throws IOException {
@@ -44,10 +40,9 @@ public class WordStatWordsPrefix {
 						tmpStr = add(tmpStr, tmpStrSize, (char) read);
 						tmpStrSize++;
 					} else if (tmpStrSize != 0) {
-						String lowCaseStr = (new String(tmpStr, 0, tmpStrSize)).substring(0, Math.min(3, tmpStrSize));
-						lowCaseStr = lowCaseStr.toLowerCase();
-
-						words = add(words, insertPos, lowCaseStr);
+						String lowCaseStr = String.valueOf(tmpStr, 0, Math.min(3, tmpStrSize));
+						
+						words = add(words, insertPos, lowCaseStr.toLowerCase());
 
 						insertPos++;
 						tmpStrSize = 0;
@@ -71,7 +66,7 @@ public class WordStatWordsPrefix {
 		return writer;
 	}
 
-	public static void outWrite(String fileName, int[] finalId, int[] cnt) {
+	public static void outWrite(String fileName, int[] cnt) {
 		try {
 			BufferedWriter out = openOutFile(fileName);
 			try {
@@ -111,7 +106,7 @@ public class WordStatWordsPrefix {
 				c == '\'');
 	}
 
-	public static void preCalc(int[] cnt, int[] finalId) { 
+	public static void preCalc(int[] cnt) { 
 		Arrays.sort(words, 0, insertPos);
 
 		int numOfEqual = 1;

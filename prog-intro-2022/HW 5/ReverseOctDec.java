@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Reverse {
+public class ReverseOctDec {
 	public static int[][] add(int[][] arr, int[] element, int pos) {
 		if (pos == arr.length) {
 			// Arrays.copyOf
@@ -45,7 +45,6 @@ public class Reverse {
 			}
 			System.err.println();
 		}
-		
 		for (int i = realSize - 1; i >= 0; i--) {
 			for (int j = endOfLines[i] - 1; j >= 0; j--) {
 				System.out.print(dataSheet[i][j]); 
