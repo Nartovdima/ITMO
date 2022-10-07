@@ -39,12 +39,12 @@ public class Reverse {
 			endOfLines = add(endOfLines, j, realSize);
 			secondDimension = Math.max(secondDimension, j);
 		}
-		for (int i = 0; i < realSize; i++) {
+		/*for (int i = 0; i < realSize; i++) {
 			for (int j = 0; j < endOfLines[i]; j++) {
 				System.err.print(dataSheet[i][j] + " ");
 			}
 			System.err.println();
-		}
+		}*/
 		
 		for (int i = realSize - 1; i >= 0; i--) {
 			for (int j = endOfLines[i] - 1; j >= 0; j--) {

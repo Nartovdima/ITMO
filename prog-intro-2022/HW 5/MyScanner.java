@@ -8,7 +8,7 @@ public class MyScanner {
 	private int brEnd;
 	private static final int brBufferSize = 1024;
 	private boolean close;
-	private String currToken, currLine;
+	public String currToken, currLine;
 
 	public MyScanner(InputStream source) {
 		this(new BufferedReader(
@@ -181,10 +181,15 @@ public class MyScanner {
 
 		String tmp = currToken;
 		currToken = null;
-		if (tmp.charAt(tmp.length() - 1) == 'o') {
-			return (Integer.parseInt(tmp.substring(0, tmp.length() - 1), 8));
+		int signed = 1, stPos = 0;
+		if (tmp.charAt(0) == '-') {
+			signed = -1; 
+			stPos = 1;
+		}
+		if (tmp.charAt(tmp.length() - 1) == 'o' || tmp.charAt(tmp.length() - 1) == 'O') {
+			return signed * (Integer.parseUnsignedInt(tmp.substring(stPos, tmp.length() - 1), 8));
 		} else {
-			return (Integer.parseInt(tmp));
+			return signed * (Integer.parseUnsignedInt(tmp.substring(stPos)));
 		}
 	}
 
@@ -205,7 +210,7 @@ public class MyScanner {
 
 	private boolean isInt(String s) {
 		int radix = 10, n = s.length();
-		if (s.charAt(n - 1) == 'o') {
+		if (s.charAt(n - 1) == 'o' || s.charAt(n - 1) == 'O') {
 			radix = 8;
 			n--;
 		}
