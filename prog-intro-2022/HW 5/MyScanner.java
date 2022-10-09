@@ -8,7 +8,7 @@ public class MyScanner {
 	private int brEnd;
 	private static final int brBufferSize = 1024;
 	private boolean close;
-	public String currToken, currLine;
+	private String currToken, currLine;
 
 	public MyScanner(InputStream source) {
 		this(new BufferedReader(
@@ -99,6 +99,7 @@ public class MyScanner {
 			if ((Character.isWhitespace(buffer[tokenEnd]) || brEnd < brInsertPos) && tokenBeg < tokenEnd) {
 				currToken = String.valueOf(buffer, tokenBeg, tokenEnd - tokenBeg);
 				brInsertPos = tokenEnd;
+				shrinkBuffer();
 				return currToken;
 			} else if (Character.isWhitespace(buffer[tokenBeg])) {
 				tokenBeg++;
@@ -140,6 +141,7 @@ public class MyScanner {
 		}
 		currLine = String.valueOf(buffer, lineBeg, lineEnd - sbstr - lineBeg);
 		brInsertPos = lineEnd + 1;
+		shrinkBuffer();
 		return currLine;
 	}
 
@@ -230,7 +232,7 @@ public class MyScanner {
 		return (ch == '\n' || ch == '\r' || ch == '\u2028' || ch == '\u2029' || ch == '\u0085');
 	}
 
-	public int fillBuffer() {
+	private int fillBuffer() {
 		if (brInsertPos == buffer.length) {
 			buffer = Arrays.copyOf(buffer, buffer.length * 2);
 		}
@@ -242,5 +244,11 @@ public class MyScanner {
 			close = true;
 			return -1;
 		}
+	}
+
+	private void shrinkBuffer() {
+		buffer = Arrays.copyOfRange(buffer, brInsertPos, brEnd + 1);
+		brEnd -= brInsertPos;
+		brInsertPos = 0;
 	}
 }
