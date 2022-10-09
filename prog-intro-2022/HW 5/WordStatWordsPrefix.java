@@ -19,15 +19,6 @@ public class WordStatWordsPrefix {
 		outWrite(OutFileName, finalId, cnt);
 	}
 
-	public static BufferedReader openInpFile(String name) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-			new FileInputStream(name), 
-			"UTF8"
-		));
-
-		return reader;
-	}
-
 	public static void inpRead(String fileName) {
 		try {
 			MyScanner in = new MyScanner(new File(fileName), "UTF8");
@@ -59,37 +50,6 @@ public class WordStatWordsPrefix {
 			System.out.println("Unable to reach access: " + e.getMessage());
 		} 
 	}
-
-	/*public static void inpRead(String fileName) {
-		try {
-			BufferedReader in = openInpFile(fileName);
-			char tmpStr[] = new char[1]; 
-			int tmpStrSize = 0;
-			try {
-				int read = in.read();
-
-				while (read != -1) {
-					if (checkChar((char) read)) {
-						tmpStr = add(tmpStr, tmpStrSize, (char) read);
-						tmpStrSize++;
-					} else if (tmpStrSize != 0) {
-						String lowCaseStr = (new String(tmpStr, 0, tmpStrSize)).substring(0, Math.min(3, tmpStrSize));
-						lowCaseStr = lowCaseStr.toLowerCase();
-
-						words = add(words, insertPos, lowCaseStr);
-
-						insertPos++;
-						tmpStrSize = 0;
-					}
-					read = in.read();
-				}
-			} finally {
-				in.close();
-			}
-		} catch (IOException e) {
-			System.out.println("Error: Input " + e.getMessage());
-		}
-	}*/
 
 	public static BufferedWriter openOutFile(String name) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
