@@ -8,9 +8,16 @@ public class Emphasis extends MarkupCollection {
     }
 
     @Override
-    public void toMarkdown (StringBuilder str) {
+    public void toMarkdown(StringBuilder str) {
         str.append("*");
         super.toMarkdown(str);
         str.append("*");
+    }
+
+    @Override
+    public void toHtml(StringBuilder str) {
+        str.append("<em>");
+        super.toHtml(str);
+        str.append("</em>");
     }
 }

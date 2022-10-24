@@ -4,3 +4,7 @@
 *.txt
 test.*
 .idea
+base/
+*Test*.java
+out/
+*.iml

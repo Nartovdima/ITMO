@@ -13,4 +13,11 @@ public class Strikeout extends MarkupCollection {
         super.toMarkdown(str);
         str.append("~");
     }
+
+    @Override
+    public void toHtml(StringBuilder str) {
+        str.append("<s>");
+        super.toHtml(str);
+        str.append("</s>");
+    }
 }

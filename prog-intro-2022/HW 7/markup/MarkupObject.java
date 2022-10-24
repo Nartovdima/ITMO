@@ -1,5 +1,5 @@
 package markup;
 
-public interface MarkupObject {
+public interface MarkupObject extends HtmlObject {
     void toMarkdown(StringBuilder str);
 }

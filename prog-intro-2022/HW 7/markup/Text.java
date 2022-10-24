@@ -12,4 +12,8 @@ public class Text implements PrimitiveMarkupObject{
         str.append(text);
     }
 
+    @Override
+    public void toHtml(StringBuilder str) {
+        str.append(text);
+    }
 }

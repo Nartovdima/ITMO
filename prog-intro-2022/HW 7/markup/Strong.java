@@ -13,4 +13,11 @@ public class Strong extends MarkupCollection {
         super.toMarkdown(str);
         str.append("__");
     }
+
+    @Override
+    public void toHtml(StringBuilder str) {
+        str.append("<strong>");
+        super.toHtml(str);
+        str.append("</strong>");
+    }
 }
