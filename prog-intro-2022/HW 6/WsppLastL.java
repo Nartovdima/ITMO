@@ -1,5 +1,8 @@
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.io.*;
+
+import javax.sound.sampled.AudioFormat.Encoding;
 
 class Pair {
 	public IntList numOfLines;
@@ -47,24 +50,19 @@ public class WsppLastL {
 	}
 
 	public static BufferedWriter openOutFile(String name) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+		return new BufferedWriter(new OutputStreamWriter(
 			new FileOutputStream(name), 
-			"UTF8"
+			StandardCharsets.UTF_8
 		));
-
-		return writer;
 	}
 
 	public static void outWrite(String fileName, Map <String, Pair> words) {
 		try {
-			BufferedWriter out = openOutFile(fileName);
-			try {
-				for(String i: words.keySet()) {  
-					print(out, i, words);
-				}
-			} finally {
-				out.close();
-			}
+            try (BufferedWriter out = openOutFile(fileName)) {
+                for (String i : words.keySet()) {
+                    print(out, i, words);
+                }
+            }
 		} catch (IOException e) {
 			System.out.println("Error: Out " + e.getMessage());
 		}
@@ -78,7 +76,7 @@ public class WsppLastL {
 			if (i == arr.numOfLines.size()) {
 				out.write(String.valueOf(arr.positions.get(i - 1)));
 			} else if (arr.numOfLines.get(i - 1) != arr.numOfLines.get(i)) {
-				out.write(String.valueOf(arr.positions.get(i - 1)) + " ");
+				out.write(arr.positions.get(i - 1) + " ");
 			}
 		}
 		out.newLine();
@@ -91,12 +89,12 @@ public class WsppLastL {
 				String tmpStr = line.substring(wordBeg, wordEnd);
 				tmpStr = tmpStr.toLowerCase();
 
-				if (!words.containsKey(tmpStr)) {
+				if (words.get(tmpStr) == null) { 
 					words.put(tmpStr, new Pair());
 				}
-
-				(words.get(tmpStr)).numOfLines.add(lineNum);
-				(words.get(tmpStr)).positions.add(cnt + 1);
+				Pair elementOfMap = words.get(tmpStr);
+				elementOfMap.numOfLines.add(lineNum);
+				elementOfMap.positions.add(cnt + 1);
 
 				wordBeg = wordEnd;
 				cnt++;
