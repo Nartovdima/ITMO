@@ -3,21 +3,17 @@ package markup;
 import java.util.List;
 
 public class Strong extends MarkupCollection {
-    public Strong(List<PrimitiveMarkupObject> collection) {
-        super(collection);
+    public Strong(List<PrimitiveMarkupObject> children) {
+        super(children);
     }
 
     @Override
     public void toMarkdown(StringBuilder str) {
-        str.append("__");
-        super.toMarkdown(str);
-        str.append("__");
+        super.toMarkdown(str, "__");
     }
 
     @Override
     public void toHtml(StringBuilder str) {
-        str.append("<strong>");
-        super.toHtml(str);
-        str.append("</strong>");
+        super.toHtml(str, "strong");
     }
 }

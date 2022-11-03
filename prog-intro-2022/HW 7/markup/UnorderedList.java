@@ -4,14 +4,12 @@ import java.util.List;
 
 public class UnorderedList extends ListObject {
 
-    public UnorderedList(List<ListItem> collection) {
-        super(collection);
+    public UnorderedList(List<ListItem> children) {
+        super(children);
     }
 
     @Override
     public void toHtml(StringBuilder str){
-        str.append("<ul>");
-        super.toHtml(str);
-        str.append("</ul>");
+        super.toHtml(str, "ul");
     }
 }

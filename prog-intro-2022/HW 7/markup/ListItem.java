@@ -3,16 +3,18 @@ package markup;
 import java.util.List;
 
 public class ListItem implements HtmlObject{
-    private final List<ListElement> collection;
+    private final List<ListElement> children;
 
-    public ListItem(List<ListElement> collection) {
-        this.collection = collection;
+    public ListItem(List<ListElement> children) {
+        this.children = children;
     }
 
     @Override
     public void toHtml(StringBuilder str) {
-        for (ListElement i : collection) {
-            i.toHtml(str);
+        str.append("<li>");
+        for (ListElement child : children) {
+            child.toHtml(str);
         }
+        str.append("</li>");
     }
 }
