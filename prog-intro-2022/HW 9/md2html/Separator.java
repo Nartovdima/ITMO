@@ -2,6 +2,7 @@ package md2html;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Separator {
     public static final List<String> lineSeparators = new ArrayList<>(List.of(
@@ -35,7 +36,7 @@ public class Separator {
 
         StringBuilder tmpStr = new StringBuilder();
         for (String i : ans) {
-            if (i == "" && !tmpStr.isEmpty()) {
+            if (Objects.equals(i, "") && !tmpStr.isEmpty()) {
                 tokens.add(tmpStr.deleteCharAt(tmpStr.length() - 1).toString());
                 tmpStr.setLength(0);
             } else if (!i.isEmpty()) {

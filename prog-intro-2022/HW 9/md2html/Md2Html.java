@@ -11,7 +11,14 @@ import java.util.*;
 public class Md2Html {
     public static String text;
     public static List<String> tokens = new ArrayList<>();
-
+    public static List<String> delimiters = new ArrayList<>(List.of(
+            "**",
+            "--",
+            "__",
+            "_",
+            "*",
+            "`"
+    ));
     public static void main(String[] args) {
         String inputFileName = args[0], outputFileName = args[1];
         try {
@@ -30,14 +37,11 @@ public class Md2Html {
     public static String htmlObjectsShielding(String text) {
         StringBuilder tmpStr = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '<') {
-                tmpStr.append("&lt;");
-            } else if (text.charAt(i) == '>') {
-                tmpStr.append("&gt;");
-            } else if (text.charAt(i) == '&') {
-                tmpStr.append("&amp;");
-            } else {
-                tmpStr.append(text.charAt(i));
+            switch (text.charAt(i)) {
+                case '<' -> tmpStr.append("&lt;");
+                case '>' -> tmpStr.append("&gt;");
+                case '&' -> tmpStr.append("&amp;");
+                default -> tmpStr.append(text.charAt(i));
             }
         }
         return tmpStr.toString();
@@ -84,77 +88,51 @@ public class Md2Html {
         }
     }
 
+    public static void addToList(String delimiter, List<MarkupCollection> tmp, List<MarkupCollection> tmpParcingObject) {
+        switch(delimiter) {
+            case "__", "**" -> tmp.add(new Strong(tmpParcingObject));
+            case "_", "*" -> tmp.add(new Emphasis(tmpParcingObject));
+            case "--" -> tmp.add(new Strikeout(tmpParcingObject));
+            case "`" -> tmp.add(new Code(tmpParcingObject));
+        }
+    }
     public static List<MarkupCollection> parseObject(String text, int stPos, int endPos) {
         List<MarkupCollection> tmp = new ArrayList<>();
         int curPos = stPos, tmpEndPos = stPos;
+
         while (curPos < endPos) {
-            if (text.charAt(curPos) == '\\') {
+            boolean step = false;
+            if (!step && text.charAt(curPos) == '\\') {
                 makePlainText(text, tmpEndPos, curPos, tmp);
                 makePlainText(text, curPos + 1, curPos + 2, tmp);
                 tmpEndPos = curPos + 2;
-                curPos += 2;
-            } else if (
-                    text.startsWith("__", curPos) &&
-                    isRightDelimiterExist(text, curPos + 2, endPos, "__") != -1
-            ) {
-                makePlainText(text, tmpEndPos, curPos, tmp);
-                tmpEndPos = isRightDelimiterExist(text, curPos + 2, endPos, "__");
-                tmp.add(new Strong(parseObject(text, curPos + 2, tmpEndPos)));
-                tmpEndPos += 2;
-                curPos = tmpEndPos;
-            } else if (
-                    text.startsWith("**", curPos) &&
-                    isRightDelimiterExist(text, curPos + 2, endPos, "**") != -1
-            ) {
-                makePlainText(text, tmpEndPos, curPos, tmp);
-                tmpEndPos = isRightDelimiterExist(text, curPos + 2, endPos, "**");
-                tmp.add(new Strong(parseObject(text, curPos + 2, tmpEndPos)));
-                tmpEndPos += 2;
-                curPos = tmpEndPos;
-            } else if (
-                    text.startsWith("_", curPos) &&
-                    isRightDelimiterExist(text, curPos + 1, endPos, "_") != -1
-            ) {
-                makePlainText(text, tmpEndPos, curPos, tmp);
-                tmpEndPos = isRightDelimiterExist(text, curPos + 1, endPos, "_");
-                tmp.add(new Emphasis(parseObject(text, curPos + 1, tmpEndPos)));
-                tmpEndPos += 1;
-                curPos = tmpEndPos;
-            } else if (
-                    text.startsWith("*", curPos) &&
-                    isRightDelimiterExist(text, curPos + 1, endPos, "*") != -1
-            ) {
-                makePlainText(text, tmpEndPos, curPos, tmp);
-                tmpEndPos = isRightDelimiterExist(text, curPos + 1, endPos, "*");
-                tmp.add(new Emphasis(parseObject(text, curPos + 1, tmpEndPos)));
-                tmpEndPos += 1;
-                curPos = tmpEndPos;
-            } else if (
-                    text.startsWith("--", curPos) &&
-                    isRightDelimiterExist(text, curPos + 2, endPos, "--") != -1
-            ) {
-                makePlainText(text, tmpEndPos, curPos, tmp);
-                tmpEndPos = isRightDelimiterExist(text, curPos + 2, endPos, "--");
-                tmp.add(new Strikeout(parseObject(text, curPos + 2, tmpEndPos)));
-                tmpEndPos += 2;
-                curPos = tmpEndPos;
-            } else if (
-                    text.startsWith("`", curPos) &&
-                    isRightDelimiterExist(text, curPos + 1, endPos, "`") != -1
-            ) {
-                makePlainText(text, tmpEndPos, curPos, tmp);
-                tmpEndPos = isRightDelimiterExist(text, curPos + 1, endPos, "`");
-                tmp.add(new Code(parseObject(text, curPos + 1, tmpEndPos)));
-                tmpEndPos += 1;
-                curPos = tmpEndPos;
-            } else if (
+                curPos += 1;
+                step = true;
+            }
+            for (String delimiter: delimiters) {
+                if (
+                        !step &&
+                        text.startsWith(delimiter, curPos) &&
+                        isRightDelimiterExist(text, curPos + delimiter.length(), endPos, delimiter) != -1
+                ) {
+                    makePlainText(text, tmpEndPos, curPos, tmp);
+                    tmpEndPos = isRightDelimiterExist(text, curPos + delimiter.length(), endPos, delimiter);
+                    addToList(delimiter, tmp, parseObject(text, curPos + delimiter.length(), tmpEndPos));
+                    tmpEndPos += delimiter.length();
+                    step = true;
+                    curPos = tmpEndPos - 1;
+                    break;
+                }
+            }
+            if (
+                    !step &&
                     text.startsWith("![", curPos) &&
-                    isRightDelimiterExist(text, curPos + 2, endPos, "](") != -1 &&
-                    isRightDelimiterExist(
-                            text,
-                            isRightDelimiterExist(text, curPos + 2, endPos, "](") + 2,
-                            endPos, ")"
-                    ) != -1
+                            isRightDelimiterExist(text, curPos + 2, endPos, "](") != -1 &&
+                            isRightDelimiterExist(
+                                    text,
+                                    isRightDelimiterExist(text, curPos + 2, endPos, "](") + 2,
+                                    endPos, ")"
+                            ) != -1
             ) {
                 makePlainText(text, tmpEndPos, curPos, tmp);
                 tmp.add(new Picture(
@@ -167,11 +145,11 @@ public class Md2Html {
                         endPos, ")"
                 );
                 tmpEndPos += 1;
-                curPos = tmpEndPos;
+                step = true;
+                curPos = tmpEndPos - 1;
 
-            } else {
-                curPos++;
             }
+            curPos++;
         }
         makePlainText(text, tmpEndPos, endPos, tmp);
         return tmp;
