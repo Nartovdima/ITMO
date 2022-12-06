@@ -1,5 +1,3 @@
-package expression;
-
 import java.util.Objects;
 
 public class Variable implements MyExpression {

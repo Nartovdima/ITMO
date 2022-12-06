@@ -1,5 +1,3 @@
-package expression;
-
 import java.util.Map;
 
 public abstract class BinaryOperation implements MyExpression {
