@@ -11,9 +11,14 @@ public class Main {
         int n = in.nextInt();
         System.out.print("Please enter the number of signs in a row: ");
         int k = in.nextInt();
-        System.out.println("Select game mode:");
-        System.out.println("1 - Classic Game");
-        System.out.println("2 - Tournament");
+        System.out.println(
+                "Select game mode:" +
+                System.lineSeparator() +
+                "1 - Classic Game" +
+                System.lineSeparator() +
+                "2 - Tournament"
+        );
+
         int mode = in.nextInt();
 
         if (mode == 1) {
@@ -42,10 +47,15 @@ public class Main {
             System.out.println("Enter a number of players: ");
             int numOfPlayers = in.nextInt();
             for (int i = 0; i < numOfPlayers; i++) {
-                System.out.println("Enter a type of Player number" + (i + 1));
-                System.out.println("1 - Random player");
-                System.out.println("2 - Sequential player");
-                System.out.println("3 - Human player");
+                System.out.println("Enter a type of Player number " + (i + 1));
+                System.out.println(
+                        "1 - Random player" +
+                        System.lineSeparator() +
+                        "2 - Sequential player" +
+                        System.lineSeparator() +
+                        "3 - Human player"
+                );
+
                 int type = in.nextInt();
                 switch (type) {
                     case 1 -> listOfPlayers.add(new RandomPlayer());
@@ -73,7 +83,5 @@ public class Main {
         }
     }
 
-    private void addBarrier() {
 
-    }
 }

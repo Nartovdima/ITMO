@@ -29,7 +29,6 @@ public class HumanPlayer implements Player {
             }
             if (cnt != 2) {
                 System.out.println("Please enter two numbers");
-                continue;
             }
 
         } while(!checkInput(row, column, position));

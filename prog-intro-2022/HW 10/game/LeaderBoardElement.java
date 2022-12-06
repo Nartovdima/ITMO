@@ -1,7 +1,7 @@
 package game;
 
 public class LeaderBoardElement implements Comparable<LeaderBoardElement>{
-    private String name;
+    private final String name;
     private int points;
 
     public LeaderBoardElement(String name) {

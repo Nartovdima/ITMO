@@ -9,7 +9,7 @@ import static game.Cell.X;
 public class MNKBoard implements Board, Position {
     private static final Map<Cell, String> CELL_TO_STRING = Map.of(
             Cell.E, ".",
-            X, "X",
+            Cell.X, "X",
             Cell.O, "0",
             Cell.B, "B"
     );
@@ -27,7 +27,7 @@ public class MNKBoard implements Board, Position {
         for (Cell [] row : field) {
             Arrays.fill(row, Cell.E);
         }
-        turn = X;
+        turn = Cell.X;
     }
 
     public MNKBoard(MNKBoard board) {
