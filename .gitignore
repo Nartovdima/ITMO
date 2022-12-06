@@ -7,5 +7,6 @@ test.*
 base/
 *Test*.java
 out/
-*.iml
 *.exe
+*tests
+*.iml
