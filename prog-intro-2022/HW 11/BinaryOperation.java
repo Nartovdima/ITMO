@@ -110,7 +110,7 @@ public abstract class BinaryOperation implements MyExpression {
     public double evaluate(double value) {
         double operationResult = 0;
         switch (operation) {
-            case ADDITION -> operationResult = leftOperand.evaluate(value)+ rightOperand.evaluate(value);
+            case ADDITION -> operationResult = leftOperand.evaluate(value) + rightOperand.evaluate(value);
             case SUBTRACTION -> operationResult = leftOperand.evaluate(value) - rightOperand.evaluate(value);
             case MULTIPLICATION -> operationResult = leftOperand.evaluate(value) * rightOperand.evaluate(value);
             case DIVISION -> operationResult = leftOperand.evaluate(value) / rightOperand.evaluate(value);
@@ -121,10 +121,10 @@ public abstract class BinaryOperation implements MyExpression {
     public int evaluate(int x, int y, int z) {
         int operationResult = 0;
         switch (operation) {
-            case ADDITION -> operationResult = leftOperand.evaluate(x, y, z)+ rightOperand.evaluate(x, y, z);
-            case SUBTRACTION -> operationResult = leftOperand.evaluate(x, y, z)- rightOperand.evaluate(x, y, z);
+            case ADDITION -> operationResult = leftOperand.evaluate(x, y, z) + rightOperand.evaluate(x, y, z);
+            case SUBTRACTION -> operationResult = leftOperand.evaluate(x, y, z) - rightOperand.evaluate(x, y, z);
             case MULTIPLICATION -> operationResult = leftOperand.evaluate(x, y, z) * rightOperand.evaluate(x, y, z);
-            case DIVISION -> operationResult = leftOperand.evaluate(x, y, z)/ rightOperand.evaluate(x, y, z);
+            case DIVISION -> operationResult = leftOperand.evaluate(x, y, z) / rightOperand.evaluate(x, y, z);
         }
         return operationResult;
     }
