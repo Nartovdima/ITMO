@@ -1,3 +1,4 @@
+package expression;
 public interface MyExpression extends Expression, DoubleExpression, TripleExpression {
     String toString();
     String toMiniString();

@@ -1,3 +1,5 @@
+package expression;
+
 import java.util.Objects;
 
 public class Const implements MyExpression {
@@ -17,13 +19,7 @@ public class Const implements MyExpression {
 
     @Override
     public String toString() {
-        if (value instanceof Integer intVal) {
-            return Integer.toString(intVal);
-        }
-        if (value instanceof Double dblVal) {
-            return Double.toString(dblVal);
-        }
-        return null;
+        return value.toString();
     }
 
     public String toMiniString() {
@@ -33,20 +29,14 @@ public class Const implements MyExpression {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Const that) {
-            return Objects.equals(this.getValue(), that.getValue());
+            return this.getValue().equals(that.getValue());
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        if (value instanceof Integer intVal) {
-            return Integer.hashCode(intVal);
-        }
-        if (value instanceof Double dblVal) {
-            return Double.hashCode(dblVal);
-        }
-        return 0;
+        return value.hashCode();
     }
 
     @Override

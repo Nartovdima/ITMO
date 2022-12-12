@@ -1,4 +1,4 @@
-import java.util.Objects;
+package expression;
 
 public class Variable implements MyExpression {
     private final String varName;
@@ -37,13 +37,14 @@ public class Variable implements MyExpression {
             case "x" -> result = x;
             case "y" -> result = y;
             case "z" -> result = z;
+            default -> throw new IllegalArgumentException("Invalid name of variable");
         }
         return result;
     }
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Variable that) {
-            return Objects.equals(this.getVarName(), that.getVarName());
+            return this.getVarName().equals(that.getVarName());
         }
         return false;
     }
