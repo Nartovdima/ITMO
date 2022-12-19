@@ -3,8 +3,8 @@ package expression;
 import java.util.Objects;
 
 public abstract class BinaryOperation implements MyExpression {
-    protected final MyExpression leftOperand;
-    protected final MyExpression rightOperand;
+    private final MyExpression leftOperand;
+    private final MyExpression rightOperand;
 
     protected BinaryOperation (
             MyExpression leftOperand,
@@ -91,12 +91,12 @@ public abstract class BinaryOperation implements MyExpression {
     protected abstract double calculateOperation(double leftOperandResult, double rightOperandResult);
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof BinaryOperation that) {
-            return (
-                    this.getOperation().equals(that.getOperation()) &&
+        if (obj != null && obj.getClass() == this.getClass()) {
+            final BinaryOperation that = (BinaryOperation) obj;
+            return
                     this.getLeftOperand().equals(that.getLeftOperand()) &&
                     this.getRightOperand().equals(that.getRightOperand())
-            );
+            ;
         }
         return false;
     }

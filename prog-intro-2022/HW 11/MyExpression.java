@@ -8,6 +8,4 @@ public interface MyExpression extends Expression, DoubleExpression, TripleExpres
     int evaluate(int value);
 
     int evaluate(int x, int y, int z);
-    boolean equals(Object obj);
-    int hashCode();
 }
