@@ -12,3 +12,4 @@ out/
 *.iml
 tests/
 cmake*/
+source_files/
