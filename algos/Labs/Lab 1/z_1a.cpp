@@ -81,7 +81,24 @@ inline void operator delete (void *) noexcept { } */
     Solutions starts here!!!
    -------------------------- */
 
+int a[100005];
 
+void quick_sort (int l, int r) {
+    if (r - l <= 1)
+        return;
+    int x = a[l + rnd() % (r - l)];
+    int p = l;
+    for (int i = l; i < r; i++)
+        if (a[i] <= x)
+            swap(a[i], a[p++]);
+    int q = p;
+    for (int i = l; i < q; i++)
+        if (a[i] == x)
+            swap(a[i], a[--q]);
+
+    quick_sort(l, q);
+    quick_sort(p, r);
+}
 
 signed main() {
     #ifdef _LOCAL
@@ -93,12 +110,13 @@ signed main() {
 
     int n;
     cin >> n;
-    int k = 0;
-    for (int i = 0; i < 100; i++) {
-    	n = ceil(sqrt(n));
-    	cout < n << '\n';
-    }
-    //cout << k << '\n';
+    for (int i = 0; i < n; i++)
+        cin >> a[i];
+
+    quick_sort(0, n);
+
+    for (int i = 0; i < n; i++)
+        cout << a[i] << ' ';
 
     #ifdef _LOCAL
         cerr << "Runtime: " << (ld)(clock() - Tsart) / CLOCKS_PER_SEC << '\n';
