@@ -34,7 +34,7 @@ public class ExpressionParser implements TripleParser {
         if (Character.isJavaIdentifierStart(expression.charAt(pos))) {
             result.append(expression.charAt(pos));
             pos++;
-            while (Character.isJavaIdentifierPart(expression.charAt(pos))) {
+            while (expression.charAt(pos) != '\u0000' && Character.isJavaIdentifierPart(expression.charAt(pos))) {
                 result.append(expression.charAt(pos));
                 pos++;
             }
@@ -162,9 +162,6 @@ public class ExpressionParser implements TripleParser {
                 currExp = new Clear(currExp, secondLevelToken());
             }
         }
-        if (currLexem != Lexem.END) {
-            throw new ParsingException("Unsupported Identifier");
-        }
         return currExp;
     }
 
@@ -173,19 +170,10 @@ public class ExpressionParser implements TripleParser {
         while (currLexem == Lexem.ADD || currLexem == Lexem.SUB) {
             if (currLexem == Lexem.ADD) {
                 getLexem();
-                if (
-                       currLexem.getType() == 1 ||
-                       currLexem.getType() == 2 ||
-                       currLexem == Lexem.LEFTBRACKET
-                ) {
-                    currExp = new CheckedAdd(currExp, thirdLevelToken());
-                } else {
-                    throw new ParsingException("Expected number, bracket or unary operation");
-                }
+                currExp = new CheckedAdd(currExp, thirdLevelToken());
             }
             if (currLexem == Lexem.SUB) {
                 getLexem();
-
                 currExp = new CheckedSubtract(currExp, thirdLevelToken());
             }
         }
@@ -231,7 +219,7 @@ public class ExpressionParser implements TripleParser {
     }
 
     private MyExpression fifthLevelToken() throws ParsingException {
-        MyExpression currExp = new Add(new Const(3), new Const(5));
+        MyExpression currExp = null;
         if (currLexem == Lexem.CONST) {
             currExp = new Const(Integer.parseInt(constValue));
         } else if (currLexem == Lexem.VAR) {
@@ -242,6 +230,9 @@ public class ExpressionParser implements TripleParser {
             if (currLexem != Lexem.RIGHTBRACKET) {
                 throw new ParsingException("Expected bracket");
             }
+        }
+        if (currExp == null) {
+            throw new ParsingException("Incorrect expression");
         }
         getLexem();
         return currExp;
