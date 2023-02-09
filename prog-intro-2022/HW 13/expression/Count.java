@@ -12,15 +12,7 @@ public class Count extends UnaryOperation {
 
     @Override
     public String toMiniString() {
-        if (
-                operand instanceof UnaryOperation ||
-                operand.getClass() == Const.class ||
-                operand.getClass() == Variable.class
-        ) {
-            return "count " + operand.toMiniString();
-        } else {
-            return "count(" + operand.toMiniString() + ")";
-        }
+        return super.toMiniString("count");
     }
 
     @Override

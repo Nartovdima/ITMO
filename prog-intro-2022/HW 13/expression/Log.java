@@ -13,15 +13,7 @@ public class Log extends UnaryOperation {
 
     @Override
     public String toMiniString() {
-        if (
-                operand instanceof UnaryOperation ||
-                operand.getClass() == Const.class ||
-                operand.getClass() == Variable.class
-        ) {
-            return "log10 " + operand.toMiniString();
-        } else {
-            return "log10(" + operand.toMiniString() + ")";
-        }
+        return super.toMiniString("log10");
     }
 
     @Override

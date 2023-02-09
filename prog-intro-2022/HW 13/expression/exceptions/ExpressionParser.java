@@ -7,16 +7,20 @@ public class ExpressionParser implements TripleParser {
     private Lexem currLexem;
     private String constValue;
     private String expression;
-    private int currPos;
+    private int currPos, lexemStartPos, bracketBalance;
     private String varName;
     @Override
     public TripleExpression parse(String expression) throws ParsingException {
         currPos = 0;
+        lexemStartPos = 1;
+        bracketBalance = 0;
         this.expression = expression + "\u0000";
         currLexem = null;
         getLexem();
         TripleExpression currRes = firstLevelToken();
-        if (currLexem != Lexem.END) {
+        if (currLexem == Lexem.RIGHTBRACKET && bracketBalance <= 0) {
+            throw new ParsingException("Missing bracket");
+        } else if (currLexem != Lexem.END) {
             throw new ParsingException("Expected End of input");
         }
         return currRes;
@@ -60,6 +64,7 @@ public class ExpressionParser implements TripleParser {
     }
 
     private void getLexem() throws ParsingException {
+        lexemStartPos = currPos + 1;
         skipWhitespaces();
         switch (expression.charAt(currPos)) {
             case '+': // ADD
@@ -88,7 +93,7 @@ public class ExpressionParser implements TripleParser {
                         currPos += 2;
                         break;
                     default:
-                        throw new ParsingException("Unsupported identifier");
+                        throw new ParsingException("Unsupported identifier at position" + lexemStartPos);
                 }
                 break;
             case 'c': // CLEAR, COUNT or Invalid lexem
@@ -102,7 +107,7 @@ public class ExpressionParser implements TripleParser {
                         currPos += 4;
                         break;
                     default:
-                        throw new ParsingException("Unsupported identifier");
+                        throw new ParsingException("Unsupported identifier at position " + lexemStartPos);
                 }
                 break;
             case 'l' : // log10
@@ -112,7 +117,7 @@ public class ExpressionParser implements TripleParser {
                         currPos += 4;
                         break;
                     default:
-                        throw new ParsingException("Unsupported identifier");
+                        throw new ParsingException("Unsupported identifier at position " + lexemStartPos);
                 }
                 break;
             case 'p' : // pow10
@@ -122,7 +127,7 @@ public class ExpressionParser implements TripleParser {
                         currPos += 4;
                         break;
                     default:
-                        throw new ParsingException("Unsupported identifier");
+                        throw new ParsingException("Unsupported identifier at position " + lexemStartPos);
                 }
                 break;
             case 'x', 'y', 'z': // VAR
@@ -143,7 +148,7 @@ public class ExpressionParser implements TripleParser {
                     currLexem = Lexem.CONST;
                     currPos += constValue.length() - 1;
                 } else {
-                    throw new ParsingException("Unsupported identifier");
+                    throw new ParsingException("Unsupported identifier at position " + lexemStartPos);
                 }
                 break;
         }
@@ -212,9 +217,6 @@ public class ExpressionParser implements TripleParser {
         } else {
             currExp = fifthLevelToken();
         }
-        if (currExp == null) {
-            throw new ParsingException("Unsupported Identifier");
-        }
         return currExp;
     }
 
@@ -224,15 +226,20 @@ public class ExpressionParser implements TripleParser {
             currExp = new Const(Integer.parseInt(constValue));
         } else if (currLexem == Lexem.VAR) {
             currExp = new Variable(varName);
+        } else if (currLexem == Lexem.RIGHTBRACKET && bracketBalance <= 0) {
+            throw new ParsingException("Missing bracket");
         } else if (currLexem == Lexem.LEFTBRACKET) {
+            bracketBalance++;
             getLexem();
             currExp = firstLevelToken();
             if (currLexem != Lexem.RIGHTBRACKET) {
-                throw new ParsingException("Expected bracket");
+                throw new ParsingException("Expected bracket at position " + lexemStartPos);
+            } else {
+                bracketBalance--;
             }
         }
         if (currExp == null) {
-            throw new ParsingException("Incorrect expression");
+            throw new ParsingException("Expected operand at position " + lexemStartPos);
         }
         getLexem();
         return currExp;

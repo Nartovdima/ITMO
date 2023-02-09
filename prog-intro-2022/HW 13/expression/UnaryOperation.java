@@ -13,8 +13,18 @@ public abstract class UnaryOperation implements MyExpression {
     }
 
     public abstract Operation getOperation();
-    @Override
-    public abstract String toMiniString();
+
+    public String toMiniString(String symbol) {
+        if (
+                operand instanceof UnaryOperation ||
+                operand.getClass() == Const.class ||
+                operand.getClass() == Variable.class
+        ) {
+            return symbol + " " + operand.toMiniString();
+        } else {
+            return symbol + "(" + operand.toMiniString() + ")";
+        }
+    }
 
     @Override
     public String toString() {

@@ -12,15 +12,7 @@ public class Negate extends UnaryOperation {
 
     @Override
     public String toMiniString() {
-        if (
-                operand instanceof UnaryOperation ||
-                operand.getClass() == Const.class ||
-                operand.getClass() == Variable.class
-        ) {
-            return "- " + operand.toMiniString();
-        } else {
-            return "-(" + operand.toMiniString() + ")";
-        }
+        return super.toMiniString("-");
     }
 
     @Override

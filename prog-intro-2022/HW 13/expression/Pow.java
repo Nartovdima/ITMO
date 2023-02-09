@@ -13,15 +13,7 @@ public class Pow extends UnaryOperation {
 
     @Override
     public String toMiniString() {
-        if (
-                operand instanceof UnaryOperation ||
-                operand.getClass() == Const.class ||
-                operand.getClass() == Variable.class
-        ) {
-            return "pow10 " + operand.toMiniString();
-        } else {
-            return "pow10(" + operand.toMiniString() + ")";
-        }
+        return super.toMiniString("pow10");
     }
 
     @Override
