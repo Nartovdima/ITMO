@@ -2,111 +2,154 @@ package queue;
 
 import java.util.Objects;
 
-public class ArrayQueueADT {
 /*
-    enqueue – добавить элемент в очередь;
-    element – первый элемент в очереди;
-    dequeue – удалить и вернуть первый элемент в очереди;
-    size – текущий размер очереди;
-    isEmpty – является ли очередь пустой;
-    clear – удалить все элементы из очереди.
-*/
-    private Object[] elementData;
-    private int size;
-    private int head;
+    Model:
+    n - queue length
+    queue[0]..queue[n - 1]
+    headElement - first element of queue
+    tailElement - last element of queue
+    next(queueElement) - the next element for queueElement
+    prev(queueElement) - the previous element for queueElement
+    Immutable(left, right) - forall queueElement from left to right : queueElement' == queueElement
+     */
+public class ArrayQueueADT {
+    private Object[] elementData = new Object[16];
+    private int head = 0, size = 0;
 
-    private ArrayQueueADT() {
-    }
     /*
     Contract
-    Pre: true
-    Post: head = 0 && size = 0 && elementData = new Object[2]
+    Pre: element != null
+    Post: Immutable(headElement, tailElement) && next(tailElement) = element && n' = n + 1
      */
-    public static ArrayQueueADT create() {
-        ArrayQueueADT queue = new ArrayQueueADT();
-        queue.elementData = new Object[2];
-        queue.head = 0;
-        queue.size = 0;
-        return queue;
-    }
-
-    /*
-        Contract
-        Pre: element != null
-        Post: elementData'[(head + size) % elementData.length] = element && size' = size + 1
-    */
-    public static void enqueue(ArrayQueueADT queue, Object element) {
+    public static void enqueue(final ArrayQueueADT queue, final Object element) {
         Objects.requireNonNull(element);
         ensureCapacity(queue);
-        queue.elementData[(queue.head + queue.size) % queue.elementData.length] = element;
+
+        int tail = (queue.head + queue.size) % queue.elementData.length;
+        queue.elementData[tail] = element;
         queue.size++;
     }
 
-    private static void ensureCapacity(ArrayQueueADT queue) {
-        int tail = (queue.head + queue.size) % queue.elementData.length;
-        if (tail == queue.head) {
-            Object[] tmpQueue = new Object[queue.elementData.length * 2];
-            System.arraycopy(queue.elementData, queue.head, tmpQueue, 0, queue.elementData.length - queue.head);
-            System.arraycopy(queue.elementData, 0, tmpQueue, queue.elementData.length - queue.head, tail);
-            queue.elementData = tmpQueue;
+    private static void queueCopy(final ArrayQueueADT queue, Object[] dest) {
+        int tail = (queue.head + queue.size) % queue.elementData.length, firstPartSize = queue.elementData.length - queue.head;
+        System.arraycopy(queue.elementData, queue.head, dest, 0, Math.min(firstPartSize, queue.size));
+        System.arraycopy(queue.elementData, 0, dest, Math.min(firstPartSize, queue.size), (queue.size < firstPartSize ? 0 : tail));
+    }
+
+    private static void ensureCapacity(final ArrayQueueADT queue) {
+        if (queue.size == queue.elementData.length) {
+            Object[] tmpElementData = new Object[queue.size * 2];
+            queueCopy(queue, tmpElementData);
+            queue.elementData = tmpElementData;
             queue.head = 0;
         }
     }
 
     /*
-        Contract
-        Pre: size > 0
-        Post: R = element[head]
-    */
-    public static Object element(ArrayQueueADT queue) {
+    Contract
+    Pre: element != null
+    Post: Immutable(headElement, tailElement) && prev(head) = element && n' = n + 1
+     */
+    public static void push(final ArrayQueueADT queue, final Object element) {
+        Objects.requireNonNull(element);
+        ensureCapacity(queue);
+
+        queue.head = (queue.head - 1 + queue.elementData.length) % queue.elementData.length;
+        queue.elementData[queue.head] = element;
+        queue.size++;
+    }
+
+    /*
+    Contract
+    Pre: n > 0
+    Post: R = tailElement
+     */
+    public static Object peek(final ArrayQueueADT queue) {
+        assert queue.size > 0;
+
+        int tail = (queue.head + queue.size - 1) % queue.elementData.length;
+        return queue.elementData[tail];
+    }
+
+    /*
+    Contract
+    Pre: n > 0
+    Post: R = tailElement && tailElement' = prev(tailElement) && Immutable(headElement, tailElement') && n' = n - 1
+     */
+    public static Object remove(final ArrayQueueADT queue) {
+        assert queue.size > 0;
+
+        Object tmpElement = peek(queue);
+        int tail = (queue.head + queue.size - 1) % queue.elementData.length;
+        queue.elementData[tail] = null;
+        queue.size--;
+        return tmpElement;
+    }
+
+    /*
+    Contract
+    Pre: true
+    Post: R = queue[] && Immutable(headElement, tailElement)
+     */
+    public static Object[] toArray(final ArrayQueueADT queue) {
+        Object[] tmpElementData = new Object[queue.size];
+
+        queueCopy(queue, tmpElementData);
+        return tmpElementData;
+    }
+
+    /*
+    Contract
+    Pre: n > 0
+    Post: R = headElement
+     */
+    public static Object element(final ArrayQueueADT queue) {
         assert queue.size > 0;
 
         return queue.elementData[queue.head];
     }
 
     /*
-        Contract
-        Pre: size > 0
-        Post: R = element[head] &&
-            size' = size - 1 &&
-            head' = (head + 1) % elementData.length &&
-            elementData[head] = null;
-    */
-    public static Object deque(ArrayQueueADT queue) {
+    Contract
+    Pre: n > 0
+    Post: R = headElement && headElement' = next(headElement) && Immutable(headElement', tailElement) && n' = n - 1
+     */
+    public static Object dequeue(final ArrayQueueADT queue) {
         assert queue.size > 0;
 
-        Object element = element(queue);
+        Object tmpElement = element(queue);
         queue.elementData[queue.head] = null;
         queue.head = (queue.head + 1) % queue.elementData.length;
         queue.size--;
-        return element;
+        return tmpElement;
     }
 
     /*
-        Contract
-        Pre: true
-        Post: R = size
-    */
-    public static int size(ArrayQueueADT queue) {
+    Contract
+    Pre: true
+    Post: R = n && Immutable(headElement, tailElement)
+     */
+    public static int size(final ArrayQueueADT queue) {
         return queue.size;
     }
 
     /*
-        Contract
-        Pre: true
-        Post: R = (elementData.length == 0)
-    */
-    public static boolean isEmpty(ArrayQueueADT queue) {
-        return queue.elementData.length == 0;
+    Contract
+    Pre: true
+    Post: R = n == 0 && Immutable(headElement, tailElement)
+     */
+    public static boolean isEmpty(final ArrayQueueADT queue) {
+        return queue.size == 0;
     }
 
     /*
-        Contract
-        Pre: true
-        Post: head' = 0 && size' = 0, forall (i in elementData) elementData[i] = null
-    */
-    public static void clear(ArrayQueueADT queue) {
-        for (int i = queue.head; i < (queue.head + queue.size) % queue.elementData.length; i++) {
+    Contract
+    Pre: true
+    Post: n' = 0
+     */
+    public static void clear(final ArrayQueueADT queue) {
+        int tail = (queue.head + queue.size) % queue.elementData.length;
+        for (int i = queue.head; i < tail; i = (i + 1) % queue.elementData.length) {
             queue.elementData[i] = null;
         }
         queue.head = 0;
