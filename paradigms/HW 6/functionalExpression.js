@@ -1,58 +1,53 @@
 "use strict";
+const cnst = value => (x, y, z) => value;
 
-lecture("1. Types and Functions");
-chapter("Types");
-section("Variables are typeless");
+const Operation = operation => (...args) => (x, y, z) => operation(...args.map(evaluate => evaluate(x, y, z)));
 
-let a = 1;
-println("a ->", a);
+const negate = Operation(a => -a);
+const floor = Operation(a => Math.floor(a));
+const ceil = Operation(a => Math.ceil(a));
 
-a = "Hello";
-println("a ->", a);
+const add = Operation((a, b) => a + b);
+const multiply = Operation((a, b) => a * b);
+const subtract = Operation((a, b) => a - b);
+const divide = Operation((a, b) => a / b);
 
-section("Values are typed");
-let as = ["'Hello'", 1, 1.1, true, false, [1, 2, 3], new Array(1, 2, 3), null, undefined];
-for (let i = 0; i < as.length; i++) {
-    println("a =", as[i]);
-    println("    typeof(a) ->", typeof(as[i]));
+const madd = Operation((a, b, c) => a * b + c);
+
+const one = cnst(1);
+const two = cnst(2);
+
+const Symbol = {"x" : 0, "y" : 1, "z" : 2}
+const variable = name => (...args) => args[Symbol[name]];
+
+const constants = {"one" : one, "two" : two};
+const operations = {
+    "+": [add, 2],
+    "-": [subtract, 2],
+    "*": [multiply, 2],
+    "/": [divide, 2],
+    "*+" : [madd, 3],
+    "negate" : [negate, 1],
+    "_" : [floor, 1],
+    "^" : [ceil, 1]
+};
+const parse = expression => {
+    let operands = [];
+    expression.trim().split(/\s+/).forEach(element => {
+        if (element in operations) {
+            let argv = [];
+            for (let i = 0; i < operations[element][1]; i++) {
+                argv.push(operands.pop());
+            }
+            argv.reverse();
+            operands.push(operations[element][0](...argv));
+        } else if (element in Symbol) {
+            operands.push(variable(element));``
+        } else if (element in constants) {
+            operands.push(constants[element]);
+        } else {
+            operands.push(cnst(parseFloat(element)));
+        }
+    });
+    return operands.pop();
 }
-
-section("Ordinary comparison");
-println("'1' == '1' ->", '1' == '1');
-println("'1' == 1 ->", '1' == 1);
-println("'1.0' == 1 ->", '1.0' == 1);
-println("undefined == undefined ->", undefined == undefined);
-println("undefined == null ->", undefined == null);
-println("null == null ->", null == null);
-println("0 == [] ->", 0 == []);
-
-section("Strict comparison");
-println("'1' === '1' ->", '1' === '1');
-println("'1' === 1 ->", '1' === 1);
-println("undefined === undefined ->", undefined === undefined);
-println("undefined === null ->", undefined === null);
-println("null === null ->", null === null);
-println("0 === [] ->", 0 === []);
-
-section("Calculations");
-println("2 + 3 ->", 2 + 3);
-println("2.1 + 3.1 ->", 2.1 + 3.1);
-println("'2.1' + '3.1' ->", '2.1' + '3.1');
-
-section("Arrays");
-as = [10, 20, 30];
-println("as -> [" + as +"]");
-println("as[2] -> ", as[2]);
-println("as[3] -> ", as[3]);
-println('as["2"] -> ', as["2"]);
-
-section("Arrays are mutable");
-example("as = new Array(10, 20, 30)");
-example("as.push(40)");
-example("as");
-example("as.pop()");
-example("as");
-example("as.unshift(50)");
-example("as");
-example("as.shift()");
-example("as");
