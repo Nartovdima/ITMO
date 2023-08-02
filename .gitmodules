@@ -1,0 +1,3 @@
+[submodule "base-cpp/calc-fold"]
+	path = base-cpp/calc-fold
+	url = https://github.com/Nartovdima/calc-fold
