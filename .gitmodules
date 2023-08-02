@@ -1,3 +1,24 @@
 [submodule "base-cpp/calc-fold"]
 	path = base-cpp/calc-fold
 	url = https://github.com/Nartovdima/calc-fold
+[submodule "base-cpp/boe-new-order-cross"]
+	path = base-cpp/boe-new-order-cross
+	url = https://github.com/Nartovdima/boe-new-order-cross
+[submodule "base-cpp/trees-splay"]
+	path = base-cpp/trees-splay
+	url = https://github.com/Nartovdima/trees-splay
+[submodule "base-cpp/randomized-queue"]
+	path = base-cpp/randomized-queue
+	url = https://github.com/Nartovdima/randomized-queue
+[submodule "base-cpp/second-chance-multitype"]
+	path = base-cpp/second-chance-multitype
+	url = https://github.com/Nartovdima/second-chance-multitype
+[submodule "base-cpp/wordnet"]
+	path = base-cpp/wordnet
+	url = https://github.com/Nartovdima/wordnet
+[submodule "base-cpp/complex"]
+	path = base-cpp/complex
+	url = https://github.com/Nartovdima/complex
+[submodule "base-cpp/combinations"]
+	path = base-cpp/combinations
+	url = https://github.com/Nartovdima/combinations
