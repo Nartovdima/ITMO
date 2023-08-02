@@ -153,12 +153,6 @@ const parse = expression => {
     expression.trim().split(/\s+/).forEach(element => {
         if (element in operations) {
             operands.push(new operations[element](...operands.splice(-operations[element].getArity())));
-            /*let argv = [];
-            for (let i = 0; i < operations[element].getArity(); i++) {
-                argv.push(operands.pop());
-            }
-            argv.reverse();
-            operands.push(new operations[element](...argv));*/
         } else if (element in variableNames) {
             operands.push(new Variable(element));``
         } else {

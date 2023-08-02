@@ -42,7 +42,7 @@ const parse = expression => {
             argv.reverse();
             operands.push(operations[element][0](...argv));
         } else if (element in Symbol) {
-            operands.push(variable(element));``
+            operands.push(variable(element));
         } else if (element in constants) {
             operands.push(constants[element]);
         } else {

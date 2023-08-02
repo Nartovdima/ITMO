@@ -2,7 +2,7 @@ package expression;
 
 import java.util.Objects;
 
-public class Const {
+public class Const implements MyExpression {
     private final Number value;
 
     public Const (int value) {
@@ -39,14 +39,17 @@ public class Const {
         return value.hashCode();
     }
 
+    @Override
     public int evaluate(int value) {
         return this.value.intValue();
     }
 
+    @Override
     public double evaluate(double value) {
         return this.value.doubleValue();
     }
 
+    @Override
     public int evaluate(int x, int y, int z) {
         return evaluate(x);
     }

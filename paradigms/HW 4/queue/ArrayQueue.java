@@ -11,20 +11,21 @@ public class ArrayQueue extends AbstractQueue {
         super.clear();
     }
 
-    protected void enqueueImpl(Object element) {
+    protected void enqueueImpl(final Object element) {
         ensureCapacity();
-        int tail = getTail();
+        final int tail = getTail();
         elementData[tail] = element;
     }
 
-    private void queueCopy(Object[] dest) {
-        int tail = getTail(), firstPartSize = elementData.length - head;
+    private void queueCopy(final Object[] dest) {
+        final int tail = getTail();
+        final int firstPartSize = elementData.length - head;
         System.arraycopy(elementData, head, dest, 0, Math.min(firstPartSize, size));
         System.arraycopy(elementData, 0, dest, Math.min(firstPartSize, size), (size < firstPartSize ? 0 : tail));
     }
     private void ensureCapacity() {
         if (size == elementData.length - 1) {
-            Object[] tmpElementData = new Object[size * 2];
+            final Object[] tmpElementData = new Object[size * 2];
             queueCopy(tmpElementData);
             elementData = tmpElementData;
             head = 0;
@@ -44,8 +45,8 @@ public class ArrayQueue extends AbstractQueue {
         elementData = new Object[16];
         head = 0;
     }
-    @Override
-    protected int findElement(Object element) {
+
+    private int findElement(final Object element) {
         for (int i = head; i != getTail(); i = next(i)) {
             if (elementData[i].equals(element)) {
                 return i;
@@ -54,18 +55,20 @@ public class ArrayQueue extends AbstractQueue {
         return -1;
     }
 
-    /*@Override
-    public boolean contains(Object element) {
+    // :NOTE: common code
+    @Override
+    public boolean contains(final Object element) {
         return findElement(element) != -1;
-    }*/
+    }
 
     @Override
-    public boolean removeFirstOccurrence(Object element) {
-        int pos = findElement(element);
+    public boolean removeFirstOccurrence(final Object element) {
+        final int pos = findElement(element);
         if (pos == -1) {
             return false;
         }
         size--;
+        // :NOTE: arraycopy
         for (int i = pos; i != getTail(); i = next(i)) {
             elementData[i] = elementData[next(i)];
         }
@@ -76,11 +79,11 @@ public class ArrayQueue extends AbstractQueue {
         return (head + size) % elementData.length;
     }
 
-    private int next(int pos) {
+    private int next(final int pos) {
         return (pos + 1) % elementData.length;
     }
 
-    private int prev(int pos) {
+    private int prev(final int pos) {
         return (pos - 1 + elementData.length) % elementData.length;
     }
 
@@ -117,7 +120,7 @@ public class ArrayQueue extends AbstractQueue {
     public Object remove() {
         assert size > 0;
 
-        Object tmpElement = peek();
+        final Object tmpElement = peek();
         elementData[prev(getTail())] = null;
         size--;
         return tmpElement;
@@ -129,7 +132,7 @@ public class ArrayQueue extends AbstractQueue {
     Post: R = data[] && Immutable(0, n)
      */
     public Object[] toArray() {
-        Object[] tmpElementData = new Object[size];
+        final Object[] tmpElementData = new Object[size];
 
         queueCopy(tmpElementData);
         return tmpElementData;
