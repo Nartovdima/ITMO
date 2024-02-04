@@ -1,0 +1,261 @@
+:root {
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
+    color: rgb(34, 34, 34);
+
+    --border-color: rgb(185, 185, 185);
+    --border: 1px solid var(--border-color);
+    --border-radius: 6px;
+    --caption-color: #3B5998;
+    --table-border-color: #d4d4d4;
+    --table-even-row-color: #f4f4f4;
+}
+
+html {
+    min-width: 800px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+header {
+    position: relative;
+}
+
+header .languages {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+header .enter-or-register-box {
+    position: absolute;
+    top: calc(24px + 0.5rem);
+    right: 0;
+}
+
+header nav {
+    border: var(--border);
+    border-radius: var(--border-radius);
+    margin: 0.5rem 0 2rem 0;
+}
+
+header nav ul {
+    padding: 0;
+    margin: 1rem;
+}
+
+header nav ul li {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: black;
+    font-family: Arial, sans-serif;
+    margin-right: 1rem;
+}
+
+header nav ul li .underlined {
+    text-decoration: underline 0.15rem var(--caption-color);
+}
+
+.middle {
+    display: flow-root;
+}
+
+aside {
+    float: right;
+    width: 20rem;
+}
+
+aside section {
+    border: var(--border);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+aside section .header {
+    border-bottom: var(--border);
+    padding: 0.25rem;
+    font-weight: bold;
+    color: var(--caption-color);
+}
+
+aside section .header:before {
+    content: "→ ";
+    font-size: 1.1rem;
+}
+
+aside section .body {
+    padding: 0.25rem;
+}
+
+aside section .footer {
+    border-top: var(--border);
+    padding: 0.25rem;
+    text-align: right;
+    font-size: 0.8rem;
+}
+
+aside section .footer a:after {
+    content: " →";
+}
+
+main {
+    margin-right: 21rem;
+}
+
+footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: var(--border);
+    text-align: center;
+}
+
+.profile {
+    border: var(--border);
+    border-radius: var(--border-radius);
+    overflow: auto;
+}
+
+.profile .profileInfo {
+    display: inline-block;
+}
+
+.profile .profileInfo .title {
+    font-size: 2rem;
+    padding: 0.5rem;
+}
+
+.profile .avatar {
+    float: right;
+    margin: 1rem;
+}
+
+main .navigation {
+    margin: 0.5rem;
+    padding: 0;
+}
+
+main .navigation li {
+    display: inline-block;
+    font-size: 1.5rem;
+}
+
+main .navigation li {
+    display: inline-block;
+    font-size: 2rem;
+    color: var(--border-color);
+}
+
+main .navigation li a{
+    text-decoration: none;
+    color: var(--caption-color);
+}
+
+main .errorCode {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+main .datatable {
+    border: 1px solid var(--table-border-color);
+    border-top-right-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+    background: var(--table-border-color);
+}
+
+main .datatable .caption {
+    padding: 0.25rem;
+}
+
+main .datatable table {
+    text-align: center;
+    border-spacing: 0.05rem;
+    width: 100%;
+}
+
+main .datatable tr {
+    background: white;
+}
+
+main .datatable tbody tr:nth-child(2n - 1) {
+    background: var(--table-even-row-color);
+}
+
+main .datatable table td, th {
+    padding: 0.25rem 1rem;
+}
+
+
+
+main article {
+    margin-bottom: 2rem;
+}
+
+main article .footer {
+    overflow: auto;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+
+}
+
+main article .footer .right {
+    padding: 0.5rem;
+    float: right;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+main article .footer .left {
+    padding: 0.5rem;
+    float: left;
+}
+
+main article .footer .left .positive-score {
+    position: relative;
+    font-weight: bold;
+    color: green;
+    bottom: 0.3rem;
+}
+
+main article .title {
+    color: var(--caption-color);
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+main article .information {
+    margin-top: 0.4rem;
+    color: grey;
+}
+
+main article .body {
+    border-left: 4px solid #b9b9b9;
+    padding-left: 1rem;
+}
+
+main article .body p:last-child {
+    margin-bottom: 1rem;
+}
+
+main article .attachment li {
+    background: url("/img/paperclip-16x16.png") no-repeat;
+    padding-left: 20px;
+    font-size: 0.9rem;
+    color: grey;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.userLink {
+    font-weight: bold;
+}
+

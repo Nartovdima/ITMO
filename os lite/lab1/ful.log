@@ -1,0 +1,6 @@
+[ 53.328] Warning: Failed to open protocol names file /usr/lib64/xorg/protocol.txt
+[ 54.415] Warning: Falling back to old probe method for modesetting
+[ 54.415] Warning: Falling back to old probe method for fbdev
+[ 54.478] Warning: vmware(0): Failed to initialize Gallium3D Xa. No render acceleration available.
+[ 54.478] Warning: vmware(0): Skipped initialization of direct rendering due to lack of render acceleration.
+[ 54.478] Warning: vmware(0): Disabling Xv because no adaptors could be initialized.
